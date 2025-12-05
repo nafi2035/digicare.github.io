@@ -1,0 +1,2338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Définition du type de document et de la langue -->
+    <meta charset="UTF-8">
+    <!-- Configuration de la vue pour le responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Titre de la page qui apparaît dans l'onglet du navigateur -->
+    <title>Digicar Civic - Lutte contre les fléaux en ligne</title>
+    
+    <!-- Intégration de Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Intégration de la police Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 
+        VARIABLES CSS ET RÉINITIALISATION
+        Les variables CSS permettent de réutiliser facilement les couleurs et valeurs
+        */
+        :root {
+            --primary-color: #2563eb;       /* Couleur principale bleue */
+            --secondary-color: #1e40af;     /* Couleur secondaire bleu foncé */
+            --accent-color: #3b82f6;        /* Couleur d'accent bleu clair */
+            --text-dark: #1f2937;           /* Couleur de texte sombre */
+            --text-light: #6b7280;          /* Couleur de texte claire */
+            --bg-light: #f8fafc;            /* Couleur de fond claire */
+            --white: #ffffff;               /* Blanc pur */
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Dégradé de couleurs */
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Ombre standard */
+            --border-radius: 12px;          /* Rayon de bordure standard */
+        }
+
+        /* 
+        RÉINITIALISATION DES STYLES PAR DÉFAUT
+        Supprime les marges et padding par défaut et utilise box-sizing: border-box
+        pour faciliter le calcul des dimensions
+        */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Inclut padding et border dans la largeur/hauteur */
+        }
+
+        /* 
+        STYLES GÉNÉRAUX DU CORPS
+        Définit la police, l'interligne, la couleur et le fond
+        */
+        body {
+            font-family: 'Inter', sans-serif; /* Police principale */
+            line-height: 1.6;               /* Hauteur de ligne pour une meilleure lisibilité */
+            color: var(--text-dark);        /* Couleur de texte par défaut */
+            overflow-x: hidden;             /* Cache la barre de défilement horizontale */
+            background-color: var(--bg-light); /* Couleur de fond de la page */
+        }
+
+        /* 
+        BARRE DE NAVIGATION
+        Position fixe en haut de la page avec un fond semi-transparent
+        */
+        .navbar {
+            position: fixed;                /* Reste en haut lors du défilement */
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95); /* Fond blanc semi-transparent */
+            backdrop-filter: blur(10px);    /* Effet de flou derrière la navbar */
+            z-index: 1000;                  /* S'assure que la navbar est au-dessus du contenu */
+            padding: 1rem 0;
+            transition: all 0.3s ease;      /* Animation fluide pour les changements de style */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+        }
+
+        /* 
+        CONTENEUR DE LA NAVIGATION
+        Centre le contenu et organise les éléments avec flexbox
+        */
+        .nav-container {
+            max-width: 1200px;              /* Largeur maximale du contenu */
+            margin: 0 auto;                 /* Centre le conteneur */
+            display: flex;
+            justify-content: space-between; /* Espace entre le logo et le menu */
+            align-items: center;            /* Aligne verticalement les éléments */
+            padding: 0 2rem;                /* Espacement intérieur */
+        }
+
+        /* 
+        LOGO DE LA NAVIGATION
+        Style pour le logo et son texte
+        */
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;                   /* Espace entre l'image et le texte */
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-decoration: none;          /* Supprime le soulignement du lien */
+        }
+
+        /* Image du logo */
+        .nav-logo img {
+            height: 100px;                  /* Hauteur fixe pour le logo */
+        }
+
+        /* 
+        MENU DE NAVIGATION
+        Liste des liens de navigation
+        */
+        .nav-menu {
+            display: flex;
+            list-style: none;              /* Supprime les puces de la liste */
+            gap: 2rem;                     /* Espace entre les éléments du menu */
+        }
+
+        /* 
+        LIENS DE NAVIGATION
+        Style des liens avec effet de survol
+        */
+        .nav-link {
+            text-decoration: none;          /* Supprime le soulignement */
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;    /* Transition douce pour le changement de couleur */
+            position: relative;             /* Permet de positionner le pseudo-élément */
+        }
+
+        /* Effet au survol et pour l'élément actif */
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        /* Ligne animée sous le lien */
+        .nav-link::after {
+            content: '';                    /* Nécessaire pour afficher le pseudo-élément */
+            position: absolute;
+            bottom: -5px;                  /* Positionne la ligne sous le texte */
+            left: 0;
+            width: 0;                      /* Largeur initiale à 0 */
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;    /* Animation de la largeur */
+        }
+
+        /* Animation de la ligne au survol */
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;                   /* Étend la ligne sur toute la largeur */
+        }
+
+        /* 
+        BOUTON DE BASSULE POUR LA NAVIGATION MOBILE
+        Caché par défaut, visible uniquement sur mobile
+        */
+        .nav-toggle {
+            display: none;                  /* Caché sur desktop */
+            flex-direction: column;         /* Aligne les barres verticalement */
+            cursor: pointer;                /* Curseur de pointeur */
+        }
+
+        /* Barres du menu hamburger */
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--text-dark);
+            margin: 3px 0;
+            transition: 0.3s;              /* Animation pour la transformation */
+        }
+
+        /* 
+        SECTION HERO (BANNIÈRE PRINCIPALE)
+        Première section visible avec un message d'accueil fort
+        */
+        .hero {
+            min-height: 100vh;              /* Prend au moins toute la hauteur de l'écran */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: var(--gradient);    /* Utilise le dégradé défini dans les variables */
+            overflow: hidden;               /* Cache le débordement des éléments flottants */
+            padding-top: 80px;              /* Compense la hauteur de la navbar fixe */
+        }
+
+        /* Contenu de la section hero */
+        .hero-content {
+            text-align: center;
+            color: var(--white);
+            z-index: 2;                     /* Au-dessus des éléments flottants */
+            position: relative;
+            max-width: 800px;               /* Limite la largeur du texte */
+            padding: 0 2rem;                /* Espacement sur les côtés */
+        }
+
+        /* Titre principal */
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;    /* Animation d'apparition */
+        }
+
+        /* Partie en surbrillance du titre */
+        .hero-title span {
+            color: #fbbf24;                 /* Couleur jaune pour mettre en valeur */
+        }
+
+        /* Sous-titre */
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;                   /* Légère transparence */
+            animation: fadeInUp 1s ease 0.2s both; /* Animation avec délai */
+        }
+
+        /* Conteneur des boutons */
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;                      /* Espace entre les boutons */
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.4s both; /* Animation avec délai plus long */
+        }
+
+        /* 
+        STYLES DES BOUTONS RÉUTILISABLES
+        */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;      /* Transition pour tous les changements */
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        /* Bouton principal avec fond blanc */
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary-color);
+        }
+
+        /* Effet au survol du bouton principal */
+        .btn-primary:hover {
+            transform: translateY(-3px);    /* Légère élévation */
+            box-shadow: var(--shadow);      /* Ajout d'ombre */
+        }
+
+        /* Bouton secondaire avec bordure */
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        /* Effet au survol du bouton secondaire */
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* 
+        ÉLÉMENTS FLOTTANTS DANS LA SECTION HERO
+        Créent un effet visuel dynamique
+        */
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Style des éléments flottants individuels */
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1); /* Cercles semi-transparents */
+            border-radius: 50%;             /* Forme circulaire */
+            animation: float 6s ease-in-out infinite; /* Animation de flottement */
+        }
+
+        /* Position et taille des différents éléments */
+        .el-1 {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 5s;
+        }
+
+        .el-2 {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 7s;
+        }
+
+        .el-3 {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 9s;
+        }
+
+        /* 
+        SECTION MISSION
+        Présente la mission de l'organisation
+        */
+        .mission {
+            padding: 5rem 0;                /* Espacement vertical important */
+            background: var(--bg-light);
+        }
+
+        /* 
+        CONTENEUR GÉNÉRIQUE POUR TOUTES LES SECTIONS
+        Centre le contenu et définit une largeur maximale
+        */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 
+        TITRE DE SECTION STANDARD
+        Style cohérent pour tous les titres de section
+        */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        /* Ligne décorative sous le titre */
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);    /* Centre la ligne */
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* Contenu de la section mission avec disposition en grille */
+        .mission-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Deux colonnes de largeur égale */
+            gap: 3rem;                      /* Espace entre les colonnes */
+            align-items: center;            /* Aligne verticalement */
+        }
+
+        /* Texte de la mission */
+        .mission-text {
+            font-size: 1.1rem;
+            line-height: 1.8;               /* Interligne plus large pour la lisibilité */
+            color: var(--text-light);
+        }
+
+        /* Image de la mission (placeholder) */
+        .mission-image {
+            background: var(--gradient);
+            height: 400px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* 
+        SECTION OBJECTIFS
+        Présente les objectifs de l'organisation sous forme de cartes
+        */
+        .objectives {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+
+        /* Grille des objectifs adaptative */
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Colonnes adaptatives */
+            gap: 2rem;
+        }
+
+        /* Carte d'objectif individuelle */
+        .objective-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            border-left: 4px solid var(--primary-color); /* Bordure colorée à gauche */
+        }
+
+        /* Effet de levée au survol */
+        .objective-card:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Icônes des cartes d'objectif */
+        .objective-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Titre de la carte d'objectif */
+        .objective-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        /* Texte de la carte d'objectif */
+        .objective-card p {
+            color: var(--text-light);
+        }
+
+        /* 
+        SECTION DOMAINES D'ACTION
+        Présente les différents domaines d'intervention
+        */
+        .domains {
+            padding: 5rem 0;
+            background: var(--bg-light);
+        }
+
+        /* Grille des domaines adaptative */
+        .domains-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Carte de domaine individuelle */
+        .domain-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;               /* Cache le débordement de l'image */
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        /* Effet de levée au survol */
+        .domain-card:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Image de la carte de domaine */
+        .domain-image {
+            height: 200px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Contenu textuel de la carte */
+        .domain-content {
+            padding: 1.5rem;
+        }
+
+        /* Titre de la carte de domaine */
+        .domain-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Texte de la carte de domaine */
+        .domain-content p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        /* 
+        SECTION ACTIONS
+        Présente les actions concrètes de l'organisation
+        */
+        .actions {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+
+        /* Grille des actions adaptative */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Carte d'action individuelle */
+        .action-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        /* Effet de levée au survol */
+        .action-card:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Icônes des cartes d'action */
+        .action-card i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Titre de la carte d'action */
+        .action-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        /* Texte de la carte d'action */
+        .action-card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        /* 
+        SECTION CONTACT
+        Formulaire de contact et informations
+        */
+        .contact {
+            padding: 5rem 0;
+            background: var(--bg-light);
+        }
+
+        /* Conteneur du contact avec disposition en grille */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Deux colonnes égales */
+            gap: 3rem;                      /* Espace entre les colonnes */
+        }
+
+        /* Informations de contact */
+        .contact-info {
+            display: flex;
+            flex-direction: column;         /* Aligne verticalement les éléments */
+            gap: 2rem;                      /* Espace entre les éléments */
+        }
+
+        /* Élément individuel d'information */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;                      /* Espace entre l'icône et le texte */
+        }
+
+        /* Style des icônes de contact */
+        .contact-item i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            width: 50px;
+            height: 50px;
+            background: var(--bg-light);
+            border-radius: 50%;             /* Forme circulaire */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Formulaire de contact */
+        .contact-form {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        /* Groupe de champs du formulaire */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Étiquettes des champs */
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Contrôles de formulaire (champs de saisie) */
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif; /* Même police que le reste */
+            transition: border-color 0.3s ease;
+        }
+
+        /* Effet de focus sur les champs */
+        .form-control:focus {
+            outline: none;                  /* Supprime le contour par défaut */
+            border-color: var(--primary-color); /* Bordure colorée au focus */
+        }
+
+        /* Zone de texte spécifique */
+        textarea.form-control {
+            min-height: 150px;              /* Hauteur minimale */
+            resize: vertical;               /* Redimensionnement vertical seulement */
+        }
+
+        /* 
+        PIED DE PAGE
+        Informations supplémentaires et liens
+        */
+        .footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 3rem 0 1rem;
+        }
+
+        /* Contenu du pied de page en grille */
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Colonnes adaptatives */
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Colonne du pied de page */
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        /* Ligne décorative sous les titres de colonne */
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        /* Liste des liens du pied de page */
+        .footer-links {
+            list-style: none;
+        }
+
+        /* Élément de liste des liens */
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Lien du pied de page */
+        .footer-links a {
+            color: #d1d5db;                 /* Gris clair */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        /* Effet au survol des liens */
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Liens des réseaux sociaux */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Lien individuel de réseau social */
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1); /* Fond semi-transparent */
+            border-radius: 50%;             /* Forme circulaire */
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Effet au survol des liens sociaux */
+        .social-links a:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);    /* Légère élévation */
+        }
+
+        /* Partie inférieure du pied de page */
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Ligne de séparation */
+            color: #9ca3af;                 /* Gris clair */
+            font-size: 0.9rem;
+        }
+
+        /* 
+        ANIMATIONS CSS
+        Définitions des keyframes pour les animations
+        */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px); /* Départ plus bas */
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);   /* Position finale */
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);   /* Position de départ et d'arrivée */
+            }
+            50% {
+                transform: translateY(-20px); /* Position la plus haute */
+            }
+        }
+
+        /* 
+        SECTION SLOGANS ANIMÉS
+        Carrousel de slogans avec images de fond
+        */
+        .slogans {
+            padding: 0;
+            background: var(--text-dark);
+        }
+
+        /* Conteneur du carrousel */
+        .slogan-slider {
+            position: relative;
+            height: 500px;
+            overflow: hidden;               /* Cache les slides non actives */
+        }
+
+        /* Slide individuel */
+        .slogan-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;                     /* Caché par défaut */
+            transition: opacity 1s ease;    /* Transition douce */
+        }
+
+        /* Slide active */
+        .slogan-slide.active {
+            opacity: 1;                     /* Visible */
+        }
+
+        /* Image de fond du slogan */
+        .slogan-image {
+            height: 100%;
+            background-size: cover;         /* Couvre tout l'espace */
+            background-position: center;    /* Centre l'image */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Contenu du slogan */
+        .slogan-content {
+            text-align: center;
+            color: var(--white);
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        /* Titre du slogan */
+        .slogan-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        /* Texte du slogan */
+        .slogan-content p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s both; /* Animation avec délai */
+        }
+
+        /* Navigation du carrousel */
+        .slogan-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 2rem;
+            transform: translateY(-50%);    /* Centre verticalement */
+        }
+
+        /* Boutons de navigation */
+        .slogan-nav button {
+            background: rgba(255, 255, 255, 0.2); /* Fond semi-transparent */
+            border: none;
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;             /* Forme circulaire */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);    /* Effet de flou derrière */
+        }
+
+        /* Effet au survol des boutons */
+        .slogan-nav button:hover {
+            background: var(--primary-color);
+        }
+
+        /* Points indicateurs */
+        .slogan-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);    /* Centre horizontalement */
+            display: flex;
+            gap: 10px;                      /* Espace entre les points */
+        }
+
+        /* Point indicateur individuel */
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5); /* Semi-transparent */
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Point actif */
+        .dot.active {
+            background: var(--white);
+            transform: scale(1.2);          /* Légèrement agrandi */
+        }
+
+        /* 
+        SECTION GALERIE
+        Galerie d'images et de vidéos avec filtres
+        */
+        .gallery {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+
+        /* Filtres de la galerie */
+        .gallery-filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;                /* Passe à la ligne si nécessaire */
+        }
+
+        /* Bouton de filtre */
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--primary-color);
+            background: transparent;
+            color: var(--primary-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        /* Bouton de filtre actif ou au survol */
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        /* Grille de la galerie */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Colonnes adaptatives */
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Élément de galerie individuel */
+        .gallery-item {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        /* Conteneur d'image ou de vidéo */
+        .gallery-image,
+        .gallery-video {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        /* Image de la galerie */
+        .gallery-image img,
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;              /* Couvre l'espace sans déformation */
+            transition: transform 0.3s ease;
+        }
+
+        /* Effet de zoom au survol */
+        .gallery-item:hover .gallery-image img,
+        .gallery-item:hover .video-thumbnail img {
+            transform: scale(1.1);          /* Légèrement agrandi */
+        }
+
+        /* Miniature de vidéo */
+        .video-thumbnail {
+            position: relative;
+            height: 100%;
+        }
+
+        /* Bouton de lecture sur les vidéos */
+        .video-play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Centre parfaitement */
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Effet au survol du bouton de lecture */
+        .gallery-item:hover .video-play {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        /* Overlay au survol */
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Fond sombre semi-transparent */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;                     /* Caché par défaut */
+            transition: opacity 0.3s ease;
+        }
+
+        /* Affiche l'overlay au survol */
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        /* Informations dans l'overlay */
+        .gallery-info {
+            text-align: center;
+            color: var(--white);
+            padding: 1rem;
+        }
+
+        /* Titre dans l'overlay */
+        .gallery-info h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* Texte dans l'overlay */
+        .gallery-info p {
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Bouton de visualisation */
+        .gallery-view {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Effet au survol du bouton */
+        .gallery-view:hover {
+            transform: scale(1.1);          /* Légèrement agrandi */
+        }
+
+        /* Bouton "Voir plus" */
+        .gallery-more {
+            text-align: center;
+        }
+
+        /* 
+        MODALS (FENÊTRES MODALES)
+        Pour l'affichage des images et vidéos en grand
+        */
+        .gallery-modal,
+        .video-modal {
+            display: none;                  /* Caché par défaut */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9); /* Fond sombre semi-transparent */
+            z-index: 2000;                  /* Au-dessus de tout */
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Modal active */
+        .gallery-modal.active,
+        .video-modal.active {
+            display: flex;                  /* Affiche le modal */
+        }
+
+        /* Contenu du modal */
+        .modal-content,
+        .video-modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        /* Bouton de fermeture du modal */
+        .modal-close,
+        .video-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--white);
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 10;                    /* Au-dessus du contenu */
+            background: rgba(0, 0, 0, 0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Image dans le modal */
+        .modal-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Légende dans le modal */
+        .modal-caption {
+            padding: 1.5rem;
+            background: var(--white);
+        }
+
+        /* Conteneur de vidéo responsive */
+        .video-container {
+            position: relative;
+            width: 800px;
+            max-width: 90vw;                /* Maximum 90% de la largeur de la vue */
+            height: 0;
+            padding-bottom: 56.25%;         /* Ratio 16:9 pour les vidéos */
+        }
+
+        /* Iframe de vidéo */
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 
+        SECTION TÉMOIGNAGES
+        Carrousel de témoignages
+        */
+        .testimonials {
+            padding: 5rem 0;
+            background: var(--bg-light);
+        }
+
+        /* Conteneur du carrousel de témoignages */
+        .testimonials-slider {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Slide de témoignage */
+        .testimonial-slide {
+            display: none;                  /* Caché par défaut */
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Slide active */
+        .testimonial-slide.active {
+            display: block;                 /* Affiche le slide actif */
+        }
+
+        /* Carte de témoignage */
+        .testimonial-card {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+        }
+
+        /* Icône de citation */
+        .quote-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Contenu du témoignage */
+        .testimonial-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-style: italic;             /* Texte en italique */
+        }
+
+        /* Auteur du témoignage */
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        /* Avatar de l'auteur */
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;             /* Forme circulaire */
+            overflow: hidden;
+        }
+
+        /* Image de l'avatar */
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;              /* Couvre l'espace sans déformation */
+        }
+
+        /* Informations de l'auteur */
+        .author-info h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .author-info span {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Navigation du carrousel de témoignages */
+        .testimonial-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);    /* Centre verticalement */
+        }
+
+        /* Boutons de navigation */
+        .testimonial-nav button {
+            background: var(--white);
+            border: none;
+            color: var(--primary-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        /* Effet au survol des boutons */
+        .testimonial-nav button:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        /* Points indicateurs */
+        .testimonial-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        /* Point indicateur individuel */
+        .testimonial-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        /* Point actif */
+        .testimonial-dot.active {
+            background: var(--primary-color);
+            transform: scale(1.2);          /* Légèrement agrandi */
+        }
+
+        /* Animation d'apparition */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 
+        DESIGN RESPONSIVE
+        Adaptation pour les écrans de tablette et mobile
+        */
+        @media (max-width: 768px) {
+            /* Navigation mobile */
+            .nav-menu {
+                position: fixed;
+                left: -100%;                /* Caché à gauche */
+                top: 70px;
+                flex-direction: column;
+                background: var(--white);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 2rem 0;
+            }
+
+            /* Menu actif (ouvert) */
+            .nav-menu.active {
+                left: 0;                    /* Affiche le menu */
+            }
+
+            /* Affiche le bouton hamburger sur mobile */
+            .nav-toggle {
+                display: flex;
+            }
+
+            /* Animation du bouton hamburger en croix */
+            .nav-toggle.active .bar:nth-child(2) {
+                opacity: 0;                 /* Cache la barre du milieu */
+            }
+
+            .nav-toggle.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg); /* Rotation */
+            }
+
+            .nav-toggle.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg); /* Rotation inverse */
+            }
+
+            /* Ajustements pour mobile */
+            .hero-title {
+                font-size: 2.5rem;          /* Taille réduite sur mobile */
+            }
+
+            .hero-buttons {
+                flex-direction: column;      /* Boutons empilés verticalement */
+                align-items: center;
+            }
+
+            /* Disposition en une colonne */
+            .mission-content {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            /* Ajustements des slogans */
+            .slogan-content h2 {
+                font-size: 2rem;
+            }
+            
+            .slogan-content p {
+                font-size: 1.2rem;
+            }
+            
+            .slogan-nav {
+                padding: 0 1rem;
+            }
+            
+            /* Ajustements des témoignages */
+            .testimonial-card {
+                padding: 2rem;
+            }
+            
+            .testimonial-nav {
+                display: none;               /* Cache les flèches sur mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+    BARRE DE NAVIGATION
+    Contient le logo et les liens de navigation
+    -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Logo de l'association -->
+            <a href="#accueil" class="nav-logo">
+                <!-- Remplacez "logo.png" par le chemin de votre logo -->
+                <img src="logo.png" alt="Digicar Civic" class="logo-image">
+            </a>
+            
+            <!-- Menu de navigation -->
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#accueil" class="nav-link active">Accueil</a></li>
+                <li class="nav-item"><a href="#mission" class="nav-link">Notre Mission</a></li>
+                <li class="nav-item"><a href="#objectifs" class="nav-link">Objectifs</a></li>
+                <li class="nav-item"><a href="#domaines" class="nav-link">Domaines d'action</a></li>
+                <li class="nav-item"><a href="#actions" class="nav-link">Nos Actions</a></li>
+                <li class="nav-item"><a href="#galerie" class="nav-link">Galerie</a></li>
+                <li class="nav-item"><a href="#temoignages" class="nav-link">Témoignages</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            
+            <!-- Bouton hamburger pour la navigation mobile -->
+            <div class="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 
+    SECTION HERO (BANNIÈRE PRINCIPALE)
+    Première section visible avec un message d'accueil fort
+    -->
+    <section class="hero" id="accueil">
+        <div class="hero-content">
+            <h1 class="hero-title">DIGICAR <span>CIVIC</span></h1>
+            <p class="hero-subtitle">Lutte contre les fléaux en ligne et promotion de la citoyenneté numérique au Cameroun</p>
+            <div class="hero-buttons">
+                <a href="#mission" class="btn btn-primary">Découvrir notre mission</a>
+                <a href="#contact" class="btn btn-secondary">Nous rejoindre</a>
+            </div>
+        </div>
+        <div class="hero-background">
+            <!-- Éléments décoratifs flottants -->
+            <div class="floating-elements">
+                <div class="floating-element el-1"></div>
+                <div class="floating-element el-2"></div>
+                <div class="floating-element el-3"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    SECTION SLOGANS ANIMÉS
+    Carrousel de slogans avec images de fond
+    -->
+    <section class="slogans" id="photo4.jpg">
+        <div class="container">
+            <div class="slogan-slider">
+                <!-- Slide 1 - Remplacez "slogan1.jpg" par votre image -->
+                <div class="slogan-slide active">
+                    <div class="slogan-image" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('photo5.jpg');">
+                        <div class="slogan-content">
+                            <h2>Un Internet plus sûr pour tous</h2>
+                            <p>Luttons ensemble contre la désinformation en ligne</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 2 - Remplacez "slogan2.jpg" par votre image -->
+                <div class="slogan-slide">
+                    <div class="slogan-image" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('slogan2.jpg');">
+                        <div class="slogan-content">
+                            <h2>Éduquer pour mieux protéger</h2>
+                            <p>Formation aux médias et à l'information numérique</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 3 - Remplacez "slogan3.jpg" par votre image -->
+                <div class="slogan-slide">
+                    <div class="slogan-image" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('photo8.jpg');">
+                        <div class="slogan-content">
+                            <h2>Défendons vos droits numériques</h2>
+                            <p>Protection contre les cyberviolences et discours de haine</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation du carrousel -->
+                <div class="slogan-nav">
+                    <button class="slogan-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slogan-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <!-- Points indicateurs -->
+                <div class="slogan-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    SECTION MISSION
+    Présente la mission de l'organisation
+    -->
+    <section class="mission" id="mission">
+        <div class="container">
+            <h2 class="section-title">Notre Mission</h2>
+            <div class="mission-content">
+                <div class="mission-text">
+                    <p>Digicar Civic est une association camerounaise engagée dans la lutte contre les fléaux en ligne, la promotion de l'éducation aux médias et à l'information, l'alphabétisation numérique et la citoyenneté numérique.</p>
+                    <p>Notre objectif est de créer un environnement numérique plus sûr, plus inclusif et plus responsable au Cameroun, où chaque citoyen peut exercer ses droits numériques en toute sécurité.</p>
+                    <p>Nous œuvrons quotidiennement pour sensibiliser, éduquer et protéger les populations face aux défis du numérique, tout en promouvant l'innovation et l'entrepreneuriat digital.</p>
+                </div>
+                <!-- Image représentant la mission (à remplacer par votre image) -->
+                <div class="mission-image">
+                    <div>Citoyenneté Numérique</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    SECTION OBJECTIFS
+    Présente les objectifs de l'organisation sous forme de cartes
+    -->
+    <section class="objectives" id="objectifs">
+        <div class="container">
+            <h2 class="section-title">Nos Objectifs</h2>
+            <div class="objectives-grid">
+                <!-- Carte objectif 1 -->
+                <div class="objective-card">
+                    <i class="fas fa-ban"></i>
+                    <h3>Lutter contre la désinformation</h3>
+                    <p>Combattre la désinformation, la mésinformation et la malinformation en ligne par l'éducation et la sensibilisation.</p>
+                </div>
+                <!-- Carte objectif 2 -->
+                <div class="objective-card">
+                    <i class="fas fa-comment-slash"></i>
+                    <h3>Combattre les discours de haine</h3>
+                    <p>Réduire les discours de haine en ligne et promouvoir un environnement numérique respectueux.</p>
+                </div>
+                <!-- Carte objectif 3 -->
+                <div class="objective-card">
+                    <i class="fas fa-female"></i>
+                    <h3>Lutter contre les violences sexistes</h3>
+                    <p>Protéger les femmes contre les violences en ligne et promouvoir l'égalité des genres dans le numérique.</p>
+                </div>
+                <!-- Carte objectif 4 -->
+                <div class="objective-card">
+                    <i class="fas fa-laptop-code"></i>
+                    <h3>Œuvrer pour l'inclusion numérique</h3>
+                    <p>Faciliter l'accès au numérique pour tous, sans discrimination d'âge, de genre ou de situation géographique.</p>
+                </div>
+                <!-- Carte objectif 5 -->
+                <div class="objective-card">
+                    <i class="fas fa-gavel"></i>
+                    <h3>Protéger les droits numériques</h3>
+                    <p>Défendre les victimes de violations des droits numériques et des libertés sur internet.</p>
+                </div>
+                <!-- Carte objectif 6 -->
+                <div class="objective-card">
+                    <i class="fas fa-database"></i>
+                    <h3>Promouvoir l'Open Data</h3>
+                    <p>Sensibiliser et plaider pour l'ouverture des données publiques au Cameroun.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    SECTION DOMAINES D'ACTION
+    Présente les différents domaines d'intervention
+    -->
+    <section class="domains" id="domaines">
+        <div class="container">
+            <h2 class="section-title">Domaines d'Action</h2>
+            <div class="domains-grid">
+                <!-- Carte domaine 1 -->
+                <div class="domain-card">
+                    <div class="domain-image">ÉDUCATION AUX MÉDIAS</div>
+                    <div class="domain-content">
+                        <h3>Éducation aux médias et à l'information</h3>
+                        <p>Former les citoyens à l'analyse critique de l'information et au décryptage des médias.</p>
+                        <a href="#" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+                <!-- Carte domaine 2 -->
+                <div class="domain-card">
+                    <div class="domain-image">ALPHABÉTISATION NUMÉRIQUE</div>
+                    <div class="domain-content">
+                        <h3>Alphabétisation numérique</h3>
+                        <p>Développer les compétences numériques de base pour une inclusion digitale réussie.</p>
+                        <a href="#" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+                <!-- Carte domaine 3 -->
+                <div class="domain-card">
+                    <div class="domain-image">CITOYENNETÉ NUMÉRIQUE</div>
+                    <div class="domain-content">
+                        <h3>Citoyenneté numérique</h3>
+                        <p>Sensibiliser aux droits et responsabilités dans l'espace numérique.</p>
+                        <a href="#" class="btn btn-primary">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    SECTION ACTIONS
+    Présente les actions concrètes de l'organisation
+    -->
+    <section class="actions" id="actions">
+        <div class="container">
+            <h2 class="section-title">Nos Actions Concrètes</h2>
+            <div class="actions-grid">
+                <!-- Carte action 1 -->
+                <div class="action-card">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h3>Ateliers de formation</h3>
+                    <p>Organisation d'ateliers dans les écoles, universités et communautés sur les enjeux du numérique.</p>
+                    <a href="#" class="btn btn-primary">Participer</a>
+                </div>
+                <!-- Carte action 2 -->
+                <div class="action-card">
+                    <i class="fas fa-hands-helping"></i>
+                    <h3>Assistance aux victimes</h3>
+                    <p>Accompagnement juridique et psychologique des victimes de cyberviolence.</p>
+                    <a href="#" class="btn btn-primary">Nous contacter</a>
+                </div>
+                <!-- Carte action 3 -->
+                <div class="action-card">
+                    <i class="fas fa-bullhorn"></i>
+                    <h3>Campagnes de sensibilisation</h3>
+                    <p>Campagnes médiatiques sur les risques en ligne et les bonnes pratiques numériques.</p>
+                    <a href="#" class="btn btn-primary">Découvrir</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    SECTION GALERIE
+    Galerie d'images et de vidéos avec filtres
+    -->
+    <section class="gallery" id="galerie">
+        <div class="container">
+            <h2 class="section-title">Galerie Photos & Vidéos</h2>
+            
+            <!-- Filtres de la galerie -->
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">Tout</button>
+                <button class="filter-btn" data-filter="photos">Photos</button>
+                <button class="filter-btn" data-filter="videos">Vidéos</button>
+                <button class="filter-btn" data-filter="evenements">Événements</button>
+            </div>
+            
+            <!-- Grille de la galerie -->
+            <div class="gallery-grid">
+                <!-- Photo 1 - Remplacez "photo1.jpg" par votre image -->
+                <div class="gallery-item photos evenements" data-category="photos,evenements">
+                    <div class="gallery-image">
+                        <img src="solid1.jpg" alt="Atelier de formation">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h3>Atelier de Formation</h3>
+                                <p>Session d'éducation aux médias</p>
+                                <button class="gallery-view"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vidéo 1 - Remplacez "video1.jpg" (miniature) et "video1.mp4" (vidéo) -->
+                <div class="gallery-item videos" data-category="videos">
+                    <div class="gallery-video">
+                        <div class="video-thumbnail">
+                            <img src="video1.jpg" alt="Sensibilisation numérique">
+                            <div class="video-play">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h3>Campagne de Sensibilisation</h3>
+                                <p>Vidéo éducative sur les risques en ligne</p>
+                                <button class="gallery-view video-btn" data-video="video1.mp4"><i class="fas fa-play"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Photo 2 - Remplacez "photo2.jpg" par votre image -->
+                <div class="gallery-item photos" data-category="photos">
+                    <div class="gallery-image">
+                        <img src="photo2.jpg" alt="Conférence">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h3>Conférence Publique</h3>
+                                <p>Débat sur la citoyenneté numérique</p>
+                                <button class="gallery-view"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Photo 3 - Remplacez "photo3.jpg" par votre image -->
+                <div class="gallery-item photos evenements" data-category="photos,evenements">
+                    <div class="gallery-image">
+                        <img src="photo3.jpg" alt="Formation">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h3>Session de Formation</h3>
+                                <p>Atelier pratique sur la sécurité en ligne</p>
+                                <button class="gallery-view"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vidéo 2 - Remplacez "video2.jpg" (miniature) et "video2.mp4" (vidéo) -->
+                <div class="gallery-item videos" data-category="videos">
+                    <div class="gallery-video">
+                        <div class="video-thumbnail">
+                            <img src="video2.jpg" alt="Témoignage">
+                            <div class="video-play">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h3>Témoignages</h3>
+                                <p>Retours d'expérience de nos bénéficiaires</p>
+                                <button class="gallery-view video-btn" data-video="video2.mp4"><i class="fas fa-play"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Photo 4 - Remplacez "photo4.jpg" par votre image -->
+                <div class="gallery-item photos" data-category="photos">
+                    <div class="gallery-image">
+                        <img src="photo4.jpg" alt="Événement">
+                        <div class="gallery-overlay">
+                            <div class="gallery-info">
+                                <h3>Événement Communautaire</h3>
+                                <p>Sensibilisation auprès du grand public</p>
+                                <button class="gallery-view"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bouton "Voir plus" -->
+            <div class="gallery-more">
+                <button class="btn btn-primary">Voir plus</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    SECTION TÉMOIGNAGES
+    Carrousel de témoignages
+    -->
+    <section class="testimonials" id="temoignages">
+        <div class="container">
+            <h2 class="section-title">Ils Nous Font Confiance</h2>
+            
+            <div class="testimonials-slider">
+                <!-- Témoignage 1 - Remplacez "temoin1.jpg" par votre photo -->
+                <div class="testimonial-slide active">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p>"Grâce aux formations de Digicar Civic, j'ai appris à identifier les fausses informations et à protéger mes données personnelles en ligne. Une initiative essentielle pour notre communauté."</p>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">
+                                    <img src="temoin1.jpg" alt="Marie">
+                                </div>
+                                <div class="author-info">
+                                    <h4>Marie N.</h4>
+                                    <span>Étudiante, Yaoundé</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Témoignage 2 - Remplacez "temoin2.jpg" par votre photo -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p>"L'accompagnement de Digicar Civic m'a été d'une grande aide lorsque j'ai été victime de harcèlement en ligne. Leur soutien juridique et psychologique m'a permis de surmonter cette épreuve."</p>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">
+                                    <img src="temoin2.jpg" alt="Jean">
+                                </div>
+                                <div class="author-info">
+                                    <h4>Jean K.</h4>
+                                    <span>Entrepreneur, Douala</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Témoignage 3 - Remplacez "temoin3.jpg" par votre photo -->
+                <div class="testimonial-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p>"En tant qu'enseignant, les ressources éducatives fournies par Digicar Civic m'ont permis de sensibiliser mes élèves aux enjeux du numérique. Un partenaire précieux pour l'éducation."</p>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">
+                                    <img src="temoin3.jpg" alt="Pierre">
+                                </div>
+                                <div class="author-info">
+                                    <h4>Pierre M.</h4>
+                                    <span>Enseignant, Bafoussam</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation du carrousel -->
+                <div class="testimonial-nav">
+                    <button class="testimonial-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="testimonial-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                
+                <!-- Points indicateurs -->
+                <div class="testimonial-dots">
+                    <span class="testimonial-dot active"></span>
+                    <span class="testimonial-dot"></span>
+                    <span class="testimonial-dot"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    SECTION CONTACT
+    Formulaire de contact et informations
+    -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Contactez-nous</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <!-- Information d'adresse -->
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Adresse</h3>
+                            <p>Yaoundé, Cameroun</p>
+                        </div>
+                    </div>
+                    <!-- Information de téléphone -->
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h3>Téléphone</h3>
+                            <p>+237 696 942 478</p>
+                        </div>
+                    </div>
+                    <!-- Information d'email -->
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>Email</h3>
+                            <p>contact@digicar-civic.cm</p>
+                        </div>
+                    </div>
+                    <!-- Information d'horaires -->
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h3>Horaires d'ouverture</h3>
+                            <p>Lun - Ven: 9h00 - 18h00<br>Sam: 9h00 - 13h00</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Formulaire de contact -->
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Nom complet</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Adresse email</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Sujet</label>
+                            <input type="text" id="subject" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Envoyer le message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+    PIED DE PAGE
+    Informations supplémentaires et liens
+    -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Colonne 1: Présentation -->
+                <div class="footer-column">
+                    <h3>Digicar Civic</h3>
+                    <p>Association de lutte contre les fléaux en ligne et promotion de la citoyenneté numérique au Cameroun.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <!-- Colonne 2: Liens rapides -->
+                <div class="footer-column">
+                    <h3>Liens rapides</h3>
+                    <ul class="footer-links">
+                        <li><a href="#accueil">Accueil</a></li>
+                        <li><a href="#mission">Notre Mission</a></li>
+                        <li><a href="#objectifs">Objectifs</a></li>
+                        <li><a href="#domaines">Domaines d'action</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <!-- Colonne 3: Nos actions -->
+                <div class="footer-column">
+                    <h3>Nos Actions</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Formations</a></li>
+                        <li><a href="#">Sensibilisation</a></li>
+                        <li><a href="#">Plaidoyer</a></li>
+                        <li><a href="#">Assistance aux victimes</a></li>
+                        <li><a href="#">Recherche</a></li>
+                    </ul>
+                </div>
+                <!-- Colonne 4: Contact -->
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> Yaoundé, Cameroun</li>
+                        <li><i class="fas fa-phone"></i> +237  696 942 478</li>
+                        <li><i class="fas fa-envelope"></i> contact@digicar-civic.cm</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Section inférieure du pied de page -->
+            <div class="footer-bottom">
+                <p>&copy; 2023 Digicar Civic. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 
+    JAVASCRIPT
+    Gère les interactions et fonctionnalités dynamiques
+    -->
+    <script>
+        // ============================================
+        // NAVIGATION MOBILE
+        // ============================================
+        
+        // Sélection des éléments de navigation
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        // Gestion du clic sur le bouton hamburger
+        navToggle.addEventListener('click', () => {
+            // Bascule la classe 'active' pour afficher/masquer le menu
+            navMenu.classList.toggle('active');
+            navToggle.classList.toggle('active');
+        });
+
+        // Fermer le menu mobile en cliquant sur un lien
+        document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+            navToggle.classList.remove('active');
+        }));
+
+        // ============================================
+        // NAVBAR SCROLL EFFECT
+        // ============================================
+        
+        // Changement de style de la navbar au défilement
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                // Style lorsque la page est défilée
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.padding = '0.5rem 0';
+            } else {
+                // Style initial
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.padding = '1rem 0';
+            }
+        });
+
+        // ============================================
+        // ANIMATION AU DÉFILEMENT
+        // ============================================
+        
+        // Configuration de l'Intersection Observer
+        const observerOptions = {
+            threshold: 0.1,                 // Déclenche lorsque 10% de l'élément est visible
+            rootMargin: '0px 0px -50px 0px' // Décale la zone de détection vers le haut
+        };
+
+        // Création de l'observateur
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Animation lorsque l'élément devient visible
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Application de l'animation aux cartes
+        document.querySelectorAll('.objective-card, .domain-card, .action-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el); // Démarre l'observation
+        });
+
+        // ============================================
+        // GESTION DU FORMULAIRE DE CONTACT
+        // ============================================
+        
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Empêche l'envoi réel du formulaire
+            alert('Merci pour votre message ! Nous vous répondrons dans les plus brefs délais.');
+            this.reset(); // Réinitialise le formulaire
+        });
+
+        // ============================================
+        // CARROUSEL DE SLOGANS
+        // ============================================
+        
+        // Sélection des éléments du carrousel de slogans
+        const sloganSlides = document.querySelectorAll('.slogan-slide');
+        const sloganDots = document.querySelectorAll('.dot');
+        const sloganPrev = document.querySelector('.slogan-prev');
+        const sloganNext = document.querySelector('.slogan-next');
+        let currentSloganSlide = 0; // Index de la slide actuelle
+
+        // Fonction pour afficher une slide spécifique
+        function showSloganSlide(n) {
+            // Masque toutes les slides et désactive tous les points
+            sloganSlides.forEach(slide => slide.classList.remove('active'));
+            sloganDots.forEach(dot => dot.classList.remove('active'));
+            
+            // Calcule l'index de la nouvelle slide (avec bouclage)
+            currentSloganSlide = (n + sloganSlides.length) % sloganSlides.length;
+            
+            // Affiche la nouvelle slide et active le point correspondant
+            sloganSlides[currentSloganSlide].classList.add('active');
+            sloganDots[currentSloganSlide].classList.add('active');
+        }
+
+        // Événements pour les boutons de navigation
+        sloganNext.addEventListener('click', () => {
+            showSloganSlide(currentSloganSlide + 1); // Slide suivante
+        });
+
+        sloganPrev.addEventListener('click', () => {
+            showSloganSlide(currentSloganSlide - 1); // Slide précédente
+        });
+
+        // Événements pour les points indicateurs
+        sloganDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showSloganSlide(index); // Affiche la slide correspondante
+            });
+        });
+
+        // Défilement automatique des slogans
+        setInterval(() => {
+            showSloganSlide(currentSloganSlide + 1);
+        }, 5000); // Change de slide toutes les 5 secondes
+
+        // ============================================
+        // FILTRAGE DE LA GALERIE
+        // ============================================
+        
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        // Gestion du clic sur les boutons de filtre
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Retire la classe active de tous les boutons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Ajoute la classe active au bouton cliqué
+                button.classList.add('active');
+                
+                // Récupère la valeur du filtre
+                const filter = button.getAttribute('data-filter');
+                
+                // Filtre les éléments de la galerie
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category').includes(filter)) {
+                        item.style.display = 'block'; // Affiche l'élément
+                    } else {
+                        item.style.display = 'none';  // Masque l'élément
+                    }
+                });
+            });
+        });
+
+        // ============================================
+        // MODAL POUR LES IMAGES DE LA GALERIE
+        // ============================================
+        
+        const galleryModal = document.querySelector('.gallery-modal');
+        const modalImage = galleryModal.querySelector('.modal-image');
+        const modalCaption = galleryModal.querySelector('.modal-caption');
+        const modalClose = galleryModal.querySelector('.modal-close');
+        const galleryViews = document.querySelectorAll('.gallery-view:not(.video-btn)');
+
+        // Gestion du clic sur les boutons de visualisation d'image
+        galleryViews.forEach(view => {
+            view.addEventListener('click', (e) => {
+                e.stopPropagation(); // Empêche la propagation de l'événement
+                const galleryItem = view.closest('.gallery-item');
+                const image = galleryItem.querySelector('img');
+                const title = galleryItem.querySelector('h3').textContent;
+                const description = galleryItem.querySelector('p').textContent;
+                
+                // Met à jour le contenu du modal
+                modalImage.src = image.src;
+                modalImage.alt = image.alt;
+                modalCaption.querySelector('h3').textContent = title;
+                modalCaption.querySelector('p').textContent = description;
+                
+                // Affiche le modal
+                galleryModal.classList.add('active');
+            });
+        });
+
+        // Fermeture du modal d'image
+        modalClose.addEventListener('click', () => {
+            galleryModal.classList.remove('active');
+        });
+
+        // ============================================
+        // MODAL POUR LES VIDÉOS
+        // ============================================
+        
+        const videoModal = document.querySelector('.video-modal');
+        const videoContainer = videoModal.querySelector('.video-container');
+        const videoClose = videoModal.querySelector('.video-modal-close');
+        const videoButtons = document.querySelectorAll('.video-btn');
+
+        // Gestion du clic sur les boutons de vidéo
+        videoButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const videoFile = button.getAttribute('data-video');
+                
+                // Crée la balise video pour les fichiers locaux
+                videoContainer.innerHTML = `
+                    <video controls autoplay style="width: 100%; height: 100%;">
+                        <source src="${videoFile}" type="video/mp4">
+                        Votre navigateur ne supporte pas la lecture de vidéos.
+                    </video>
+                `;
+                
+                // Affiche le modal
+                videoModal.classList.add('active');
+            });
+        });
+
+        // Fermeture du modal de vidéo
+        videoClose.addEventListener('click', () => {
+            videoModal.classList.remove('active');
+            // Arrête la vidéo et réinitialise
+            const video = videoContainer.querySelector('video');
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+            }
+            videoContainer.innerHTML = ''; // Vide le conteneur
+        });
+
+        // Fermeture des modals en cliquant à l'extérieur
+        [galleryModal, videoModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    if (modal === videoModal) {
+                        const video = videoContainer.querySelector('video');
+                        if (video) {
+                            video.pause();
+                            video.currentTime = 0;
+                        }
+                        videoContainer.innerHTML = '';
+                    }
+                }
+            });
+        });
+
+        // ============================================
+        // CARROUSEL DE TÉMOIGNAGES
+        // ============================================
+        
+        const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+        const testimonialDots = document.querySelectorAll('.testimonial-dot');
+        const testimonialPrev = document.querySelector('.testimonial-prev');
+        const testimonialNext = document.querySelector('.testimonial-next');
+        let currentTestimonialSlide = 0;
+
+        // Fonction pour afficher un témoignage spécifique
+        function showTestimonialSlide(n) {
+            // Masque tous les témoignages et désactive tous les points
+            testimonialSlides.forEach(slide => slide.classList.remove('active'));
+            testimonialDots.forEach(dot => dot.classList.remove('active'));
+            
+            // Calcule l'index du nouveau témoignage (avec bouclage)
+            currentTestimonialSlide = (n + testimonialSlides.length) % testimonialSlides.length;
+            
+            // Affiche le nouveau témoignage et active le point correspondant
+            testimonialSlides[currentTestimonialSlide].classList.add('active');
+            testimonialDots[currentTestimonialSlide].classList.add('active');
+        }
+
+        // Événements pour les boutons de navigation
+        testimonialNext.addEventListener('click', () => {
+            showTestimonialSlide(currentTestimonialSlide + 1);
+        });
+
+        testimonialPrev.addEventListener('click', () => {
+            showTestimonialSlide(currentTestimonialSlide - 1);
+        });
+
+        // Événements pour les points indicateurs
+        testimonialDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showTestimonialSlide(index);
+            });
+        });
+
+        // Défilement automatique des témoignages
+        setInterval(() => {
+            showTestimonialSlide(currentTestimonialSlide + 1);
+        }, 7000); // Change de témoignage toutes les 7 secondes
+
+        // ============================================
+        // FONCTION INTELLIGENTE : GESTION DES IMAGES MANQUANTES
+        // ============================================
+        
+        // Fonction pour détecter et gérer les images manquantes
+        function handleMissingImages() {
+            const allImages = document.querySelectorAll('img');
+            
+            allImages.forEach(img => {
+                // Vérifie si l'image est cassée
+                img.addEventListener('error', function() {
+                    console.warn(`Image manquante: ${this.src}`);
+                    
+                    // Remplace l'image manquante par une image de substitution
+                    this.src = 'placeholder.jpg'; // Image de remplacement par défaut
+                    this.alt = 'Image non disponible';
+                    
+                    // Ajoute un indicateur visuel
+                    this.style.border = '2px dashed #ccc';
+                    this.style.padding = '10px';
+                    
+                    // Affiche un message dans la console pour le débogage
+                    console.log(`Image remplacée: ${this.alt}`);
+                });
+                
+                // Vérifie si l'image est chargée avec succès
+                img.addEventListener('load', function() {
+                    console.log(`Image chargée: ${this.src}`);
+                });
+            });
+        }
+
+        // Appel de la fonction au chargement de la page
+        window.addEventListener('DOMContentLoaded', handleMissingImages);
+
+        // ============================================
+        // FONCTION INTELLIGENTE : SUIVI DES INTERACTIONS
+        // ============================================
+        
+        // Fonction pour suivre les interactions utilisateur
+        function trackUserInteractions() {
+            // Suivi des clics sur les boutons
+            const buttons = document.querySelectorAll('button, .btn, a.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    console.log(`Bouton cliqué: ${this.textContent.trim() || this.getAttribute('class')}`);
+                    // Ici, vous pourriez envoyer ces données à Google Analytics
+                });
+            });
+            
+            // Suivi du temps passé sur la page
+            let timeSpent = 0;
+            setInterval(() => {
+                timeSpent++;
+                if (timeSpent % 30 === 0) { // Toutes les 30 secondes
+                    console.log(`Temps passé sur la page: ${timeSpent} secondes`);
+                }
+            }, 1000);
+            
+            // Suivi du défilement
+            let maxScroll = 0;
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.scrollY;
+                if (currentScroll > maxScroll) {
+                    maxScroll = currentScroll;
+                    console.log(`Défilement maximum: ${maxScroll}px`);
+                }
+            });
+        }
+
+        // Appel de la fonction au chargement de la page
+        window.addEventListener('DOMContentLoaded', trackUserInteractions);
+
+        // ============================================
+        // FONCTION INTELLIGENTE : GESTION DES PERFORMANCES
+        // ============================================
+        
+        // Fonction pour optimiser les performances
+        function optimizePerformance() {
+            // Chargement différé des images hors écran
+            const images = document.querySelectorAll('img');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.getAttribute('data-src') || img.src;
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+            
+            // Application de l'observation à toutes les images
+            images.forEach(img => {
+                if (!img.src) {
+                    img.setAttribute('data-src', img.getAttribute('src'));
+                    img.removeAttribute('src');
+                    imageObserver.observe(img);
+                }
+            });
+            
+            // Optimisation des animations
+            const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+            if (mediaQuery.matches) {
+                // Réduit les animations si l'utilisateur le préfère
+                document.documentElement.style.setProperty('--animation-duration', '0.1s');
+            }
+        }
+
+        // Appel de la fonction au chargement de la page
+        window.addEventListener('DOMContentLoaded', optimizePerformance);
+    </script>
+</body>
+</html>
